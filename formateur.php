@@ -14,18 +14,27 @@
 
 $method= $_SERVER['REQUEST_METHOD'];
 if ($method=='POST')
-    if(isset($_POST['formateur'])){
-        $id = $_id['id'];
+   {
+    if(isset($_POST['nom']) && isset($_POST['prenom'])  ){
         $nom = $_POST['nom'];
         $prenom = $_POST['prenom'];
 
-        if (!empty($id) && !empty($nom) && !empty($prenom)) {
-            $sql = ('INSERT INTO formateur (id,nom,prenom) VALUES (?, ?, ?)');
+        if (!empty($nom) && !empty($prenom)) {
+            $sql = 'INSERT INTO formateur  (nom,prenom) VALUES (?, ?)';
             $sqlState = $pdo->prepare($sql);
-            $sqlState = $sqlState->execute([$id,$nom,$prenom]);}else{
-            echo "Tous les champs sont obligatoires.";
+            $inserted = $sqlState->execute([$nom,$prenom]);
+            if($inserted ){
+                echo 'gooood';
+            }else{
+                
+                http_response_code(400);
             }
-            
+            }else{
+                http_response_code(400);
+            }
+        }else{
+            http_response_code(400);
+        }         
     // echo $name;
     // var_dump($_POST);
 }else{
